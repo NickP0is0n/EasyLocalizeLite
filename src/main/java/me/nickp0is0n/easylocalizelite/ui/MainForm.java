@@ -1,8 +1,12 @@
 package me.nickp0is0n.easylocalizelite.ui;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
+import java.beans.PropertyChangeListener;
 
 public class MainForm extends JFrame{
     private JPanel panel1;
@@ -69,5 +73,23 @@ public class MainForm extends JFrame{
 
     public void setParserSettingsMenuItemOnClickListener(ActionListener listener) {
         parserSettingsMenuItem.addActionListener(listener);
+    }
+
+    public void setStringAreaOnEditListener(Runnable listener) {
+        stringArea.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                listener.run();
+            }
+            public void removeUpdate(DocumentEvent e) {
+                listener.run();
+            }
+            public void insertUpdate(DocumentEvent e) {
+                listener.run();
+            }
+        });
+    }
+
+    public String getStringAreaText() {
+        return stringArea.getText();
     }
 }

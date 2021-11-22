@@ -28,6 +28,18 @@ class MainController(val form: MainForm) {
         }
 
         form.setOpenMenuItemOnClickListener(onOpenItemClick)
+        form.setStringAreaOnEditListener(onStringEdit)
+    }
+
+    val onStringEdit = fun() {
+        val currentString = list[form.stringIDListCurrentSelectionIndex]
+        list[form.stringIDListCurrentSelectionIndex] = LocalizedString(
+            currentString.id,
+            form.stringAreaText,
+            currentString.comment,
+            mark = currentString.mark,
+            copyrightHeader = currentString.copyrightHeader
+        )
     }
 
     val onOpenItemClick = fun(_: ActionEvent) {
