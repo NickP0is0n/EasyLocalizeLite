@@ -1,5 +1,6 @@
 package me.nickp0is0n.easylocalizelite.ui
 
+import dorkbox.notify.Notify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -8,7 +9,9 @@ import me.nickp0is0n.easylocalizelite.models.LocalizedString
 import me.nickp0is0n.easylocalizelite.models.ParserSettings
 import me.nickp0is0n.easylocalizelite.models.StringIDListModel
 import me.nickp0is0n.easylocalizelite.utils.AppInfo
+import me.nickp0is0n.easylocalizelite.utils.LocalizeExporter
 import me.nickp0is0n.easylocalizelite.utils.LocalizeParser
+import me.nickp0is0n.easylocalizelite.utils.NotifyNotificationSender
 import java.awt.FileDialog
 import java.awt.event.ActionEvent
 import java.io.*
@@ -31,6 +34,7 @@ class MainController(val form: MainForm) {
         form.setOpenMenuItemOnClickListener(onOpenItemClick)
         form.setSaveAsMenuItemOnClickListener(onSaveAsItemClick)
         form.setStringAreaOnEditListener(onStringEdit)
+        form.setExportTranslationsToFileButtonOnClickListener(onExportButtonClick)
     }
 
     val onOpenItemClick = fun(_: ActionEvent) {
@@ -70,6 +74,30 @@ class MainController(val form: MainForm) {
         if (saveDialog.files.isNotEmpty()) {
             currentSaveFile = saveDialog.files[0]
             saveProjectFile()
+        }
+    }
+
+    val onExportButtonClick = fun(_: ActionEvent) {
+        val exporter = LocalizeExporter()
+
+        val openDialog = FileDialog(form)
+        openDialog.mode = FileDialog.SAVE
+        openDialog.isVisible = true
+
+        val exportFile = try {
+            openDialog.files[0]
+        }
+        catch (e: ArrayIndexOutOfBoundsException) {
+            null
+        }
+
+        if (exportFile != null) {
+            if (!exportFile.exists()) {
+                exportFile.createNewFile()
+            }
+            exporter.toFile(list, exportFile)
+            val notificator = NotifyNotificationSender()
+            notificator.send("Success", "Localization file has been successfully exported.")
         }
     }
 

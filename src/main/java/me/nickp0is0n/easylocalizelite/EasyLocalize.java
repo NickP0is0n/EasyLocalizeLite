@@ -8,6 +8,7 @@ import me.nickp0is0n.easylocalizelite.utils.AppInfo;
 public class EasyLocalize {
     public static void main(String[] args) {
         System.setProperty("apple.awt.application.appearance", "NSAppearanceNameDarkAqua");
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
         FlatOneDarkIJTheme.setup();
         MainForm form = new MainForm();
         form.setSize(640, 480);

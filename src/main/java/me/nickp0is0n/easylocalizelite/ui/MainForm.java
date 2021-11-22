@@ -75,6 +75,14 @@ public class MainForm extends JFrame{
         parserSettingsMenuItem.addActionListener(listener);
     }
 
+    public void setExportTranslationsToFileButtonOnClickListener(ActionListener listener) {
+        exportTranslationsToFileButton.addActionListener(listener);
+    }
+
+    public void setCopyStringToClipboardButtonOnClickListener(ActionListener listener) {
+        copyStringToClipboardButton.addActionListener(listener);
+    }
+
     public void setStringAreaOnEditListener(Runnable listener) {
         stringArea.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
