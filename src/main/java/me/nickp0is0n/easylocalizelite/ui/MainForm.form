@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="10" bottom="5" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="587" height="400"/>
+      <xy x="20" y="20" width="519" height="400"/>
     </constraints>
     <properties>
       <preferredSize width="640" height="480"/>
@@ -18,16 +18,6 @@
         <properties>
           <font size="16" style="1"/>
           <text value="String ID's"/>
-        </properties>
-      </component>
-      <component id="495ad" class="javax.swing.JList" binding="stringIdList">
-        <constraints>
-          <grid row="1" column="0" row-span="4" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-        </constraints>
-        <properties>
-          <model/>
         </properties>
       </component>
       <component id="59883" class="javax.swing.JLabel">
@@ -45,7 +35,9 @@
             <preferred-size width="150" height="50"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <lineWrap value="true"/>
+        </properties>
       </component>
       <component id="efd89" class="javax.swing.JLabel">
         <constraints>
@@ -80,8 +72,23 @@
             <preferred-size width="150" height="50"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <lineWrap value="true"/>
+        </properties>
       </component>
+      <scrollpane id="b0de7">
+        <constraints>
+          <grid row="1" column="0" row-span="4" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="df758" class="javax.swing.JList" binding="stringIdList">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>

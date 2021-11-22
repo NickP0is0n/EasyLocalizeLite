@@ -1,13 +1,15 @@
 package me.nickp0is0n.easylocalizelite.models
 
+import javax.swing.DefaultListModel
 import javax.swing.ListModel
 import javax.swing.event.ListDataListener
 
-class StringIDListModel: ListModel<String> {
+class StringIDListModel: DefaultListModel<String>() {
     var list = mutableListOf<LocalizedString>()
 
     fun setElements(stringList: List<LocalizedString>) {
         this.list = stringList as MutableList<LocalizedString>
+        fireContentsChanged(this, 0, list.size)
     }
 
     override fun getSize(): Int {
@@ -16,11 +18,5 @@ class StringIDListModel: ListModel<String> {
 
     override fun getElementAt(index: Int): String {
         return list[index].id
-    }
-
-    override fun addListDataListener(l: ListDataListener?) {
-    }
-
-    override fun removeListDataListener(l: ListDataListener?) {
     }
 }
