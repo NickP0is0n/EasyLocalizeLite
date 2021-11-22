@@ -1,6 +1,5 @@
 package me.nickp0is0n.easylocalizelite.ui
 
-import dorkbox.notify.Notify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,6 +12,8 @@ import me.nickp0is0n.easylocalizelite.utils.DialogNotificationSender
 import me.nickp0is0n.easylocalizelite.utils.LocalizeExporter
 import me.nickp0is0n.easylocalizelite.utils.LocalizeParser
 import java.awt.FileDialog
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 import java.awt.event.ActionEvent
 import java.io.*
 
@@ -35,6 +36,7 @@ class MainController(val form: MainForm) {
         form.setSaveAsMenuItemOnClickListener(onSaveAsItemClick)
         form.setStringAreaOnEditListener(onStringEdit)
         form.setExportTranslationsToFileButtonOnClickListener(onExportButtonClick)
+        form.setCopyStringToClipboardButtonOnClickListener(onCopyButtonClick)
     }
 
     val onOpenItemClick = fun(_: ActionEvent) {
@@ -100,6 +102,11 @@ class MainController(val form: MainForm) {
             val notificator = DialogNotificationSender()
             notificator.send("Success", "Localization file has been successfully exported.")
         }
+    }
+
+    val onCopyButtonClick = fun(_: ActionEvent) {
+        val selection = StringSelection(list[form.stringIDListCurrentSelectionIndex].toString())
+        Toolkit.getDefaultToolkit().systemClipboard.setContents(selection, null)
     }
 
     private fun saveProjectFile() {
