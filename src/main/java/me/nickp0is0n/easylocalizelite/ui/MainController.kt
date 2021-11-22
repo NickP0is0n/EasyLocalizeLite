@@ -9,9 +9,9 @@ import me.nickp0is0n.easylocalizelite.models.LocalizedString
 import me.nickp0is0n.easylocalizelite.models.ParserSettings
 import me.nickp0is0n.easylocalizelite.models.StringIDListModel
 import me.nickp0is0n.easylocalizelite.utils.AppInfo
+import me.nickp0is0n.easylocalizelite.utils.DialogNotificationSender
 import me.nickp0is0n.easylocalizelite.utils.LocalizeExporter
 import me.nickp0is0n.easylocalizelite.utils.LocalizeParser
-import me.nickp0is0n.easylocalizelite.utils.NotifyNotificationSender
 import java.awt.FileDialog
 import java.awt.event.ActionEvent
 import java.io.*
@@ -57,6 +57,7 @@ class MainController(val form: MainForm) {
                 }
             }
             else {
+                currentSaveFile = null
                 val stringFile = openDialog.files[0]
                 list.also {
                     it.clear()
@@ -96,7 +97,7 @@ class MainController(val form: MainForm) {
                 exportFile.createNewFile()
             }
             exporter.toFile(list, exportFile)
-            val notificator = NotifyNotificationSender()
+            val notificator = DialogNotificationSender()
             notificator.send("Success", "Localization file has been successfully exported.")
         }
     }
@@ -109,8 +110,10 @@ class MainController(val form: MainForm) {
 
     private suspend fun writeToProjectFile() = withContext(Dispatchers.IO) {
         try {
-            ObjectOutputStream(FileOutputStream(currentSaveFile!!)).use {
-                it.writeObject(list)
+            if (currentSaveFile != null) {
+                ObjectOutputStream(FileOutputStream(currentSaveFile!!)).use {
+                    it.writeObject(list)
+                }
             }
         }
         catch (e: IOException) {
@@ -127,5 +130,6 @@ class MainController(val form: MainForm) {
             mark = currentString.mark,
             copyrightHeader = currentString.copyrightHeader
         )
+        saveProjectFile()
     }
 }
