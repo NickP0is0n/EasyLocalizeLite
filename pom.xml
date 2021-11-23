@@ -42,11 +42,6 @@
             <version>1.6.0-RC</version>
             <type>pom</type>
         </dependency>
-        <dependency>
-            <groupId>com.dorkbox</groupId>
-            <artifactId>Notify</artifactId>
-            <version>3.7</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -92,6 +87,30 @@
                         <goals>
                             <goal>testCompile</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>me.nickp0is0n.easylocalizelite.EasyLocalize</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

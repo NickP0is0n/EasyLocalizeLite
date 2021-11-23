@@ -1,12 +1,6 @@
 package me.nickp0is0n.easylocalizelite;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.intellijthemes.FlatArcIJTheme;
 import com.formdev.flatlaf.intellijthemes.FlatOneDarkIJTheme;
-import com.formdev.flatlaf.intellijthemes.FlatVuesionIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightContrastIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDeepOceanIJTheme;
 import me.nickp0is0n.easylocalizelite.ui.MainController;
 import me.nickp0is0n.easylocalizelite.ui.MainForm;
 import me.nickp0is0n.easylocalizelite.utils.AppInfo;
