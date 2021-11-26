@@ -25,7 +25,9 @@ class MainController(val form: MainForm) {
     private val model = StringIDListModel()
 
     fun run() {
-        model.setElements(list)
+        model.setElements(list.filter {
+            it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
+        })
         form.setStringIDList(model)
         form.setStringIDListListener {
             form.setStringAreaText(model.list[form.stringIDListCurrentSelectionIndex].text)
@@ -38,6 +40,7 @@ class MainController(val form: MainForm) {
         form.setExportTranslationsToFileButtonOnClickListener(onExportButtonClick)
         form.setCopyStringToClipboardButtonOnClickListener(onCopyButtonClick)
         form.setSearchButtonOnClickListener(onSearchButtonClick)
+        form.setSearchBarOnEditListener(onSearchBarEdit)
     }
 
     private val onOpenItemClick = fun(_: ActionEvent) {
@@ -114,6 +117,12 @@ class MainController(val form: MainForm) {
         form.switchSearchBarVisibility()
     }
 
+    private val onSearchBarEdit = fun() {
+        model.setElements(list.filter {
+            it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
+        })
+    }
+
     private fun saveProjectFile() {
         CoroutineScope(Dispatchers.IO).launch {
             writeToProjectFile()
@@ -134,14 +143,17 @@ class MainController(val form: MainForm) {
     }
 
     val onStringEdit = fun() {
-        val currentString = list[form.stringIDListCurrentSelectionIndex]
-        list[form.stringIDListCurrentSelectionIndex] = LocalizedString(
+        val currentString = model.list[form.stringIDListCurrentSelectionIndex]
+        list[list.indexOf(list.find { it.id == currentString.id })] = LocalizedString(
             currentString.id,
             form.stringAreaText,
             currentString.comment,
             mark = currentString.mark,
             copyrightHeader = currentString.copyrightHeader
         )
+        model.setElements(list.filter {
+            it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
+        })
         saveProjectFile()
     }
 }
