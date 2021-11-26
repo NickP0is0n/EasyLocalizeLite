@@ -18,11 +18,11 @@ import java.awt.event.ActionEvent
 import java.io.*
 
 class MainController(val form: MainForm) {
-    val list = mutableListOf(LocalizedString("No file is currently loaded.", "", ""))
-    var currentSaveFile: File? = null
-    val parserSettings = ParserSettings()
-    val parser = LocalizeParser(parserSettings)
-    val model = StringIDListModel()
+    private val list = mutableListOf(LocalizedString("No file is currently loaded.", "", ""))
+    private var currentSaveFile: File? = null
+    private val parserSettings = ParserSettings()
+    private val parser = LocalizeParser(parserSettings)
+    private val model = StringIDListModel()
 
     fun run() {
         model.setElements(list)
@@ -37,9 +37,10 @@ class MainController(val form: MainForm) {
         form.setStringAreaOnEditListener(onStringEdit)
         form.setExportTranslationsToFileButtonOnClickListener(onExportButtonClick)
         form.setCopyStringToClipboardButtonOnClickListener(onCopyButtonClick)
+        form.setSearchButtonOnClickListener(onSearchButtonClick)
     }
 
-    val onOpenItemClick = fun(_: ActionEvent) {
+    private val onOpenItemClick = fun(_: ActionEvent) {
         val openDialog = FileDialog(form)
         openDialog.isVisible = true
         if (openDialog.files.isEmpty()) {
@@ -69,7 +70,7 @@ class MainController(val form: MainForm) {
         model.setElements(list)
     }
 
-    val onSaveAsItemClick = fun(_: ActionEvent) {
+    private val onSaveAsItemClick = fun(_: ActionEvent) {
         val saveDialog = FileDialog(form)
         saveDialog.mode = FileDialog.SAVE
         saveDialog.file = "*.elproject"
@@ -80,7 +81,7 @@ class MainController(val form: MainForm) {
         }
     }
 
-    val onExportButtonClick = fun(_: ActionEvent) {
+    private val onExportButtonClick = fun(_: ActionEvent) {
         val exporter = LocalizeExporter()
 
         val openDialog = FileDialog(form)
@@ -104,9 +105,13 @@ class MainController(val form: MainForm) {
         }
     }
 
-    val onCopyButtonClick = fun(_: ActionEvent) {
+    private val onCopyButtonClick = fun(_: ActionEvent) {
         val selection = StringSelection(list[form.stringIDListCurrentSelectionIndex].toString())
         Toolkit.getDefaultToolkit().systemClipboard.setContents(selection, null)
+    }
+
+    private val onSearchButtonClick = fun(_: ActionEvent) {
+        form.switchSearchBarVisibility()
     }
 
     private fun saveProjectFile() {
