@@ -6,7 +6,6 @@ EasyLocalize was created to simplify manual translation of macOS and iOS apps. I
 ## Credits
 Application code at this moment was written solely by me, however it uses several open source frameworks:
 * FlatLaf (Apache License, Version 2.0) - Copyright JFormDesiner
-* JUnit 5 (Eclipse Public License)
 ## Supported OS
 Although it is possible to compile and run the program on Windows and Linux, only macOS 10.9 and newer is supported officially and only macOS artifacts are available to download in binary form.
 ## Caution

@@ -1,8 +1,6 @@
 package me.nickp0is0n.easylocalizelite.models
 
 import javax.swing.DefaultListModel
-import javax.swing.ListModel
-import javax.swing.event.ListDataListener
 
 class StringIDListModel: DefaultListModel<String>() {
     var list = mutableListOf<LocalizedString>()
