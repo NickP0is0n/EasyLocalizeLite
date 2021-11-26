@@ -1,8 +1,11 @@
 package me.nickp0is0n.easylocalizelite;
 
 import com.formdev.flatlaf.intellijthemes.FlatOneDarkIJTheme;
+import me.nickp0is0n.easylocalizelite.models.ParserSettings;
 import me.nickp0is0n.easylocalizelite.ui.MainController;
 import me.nickp0is0n.easylocalizelite.ui.MainForm;
+import me.nickp0is0n.easylocalizelite.ui.ParserSettingsController;
+import me.nickp0is0n.easylocalizelite.ui.ParserSettingsForm;
 import me.nickp0is0n.easylocalizelite.utils.AppInfo;
 
 public class EasyLocalize {

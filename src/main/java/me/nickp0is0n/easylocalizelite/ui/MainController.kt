@@ -41,6 +41,7 @@ class MainController(val form: MainForm) {
         form.setCopyStringToClipboardButtonOnClickListener(onCopyButtonClick)
         form.setSearchButtonOnClickListener(onSearchButtonClick)
         form.setSearchBarOnEditListener(onSearchBarEdit)
+        form.setParserSettingsMenuItemOnClickListener(onParserSettingsItemClick)
     }
 
     private val onOpenItemClick = fun(_: ActionEvent) {
@@ -121,6 +122,14 @@ class MainController(val form: MainForm) {
         model.setElements(list.filter {
             it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
         })
+    }
+
+    private val onParserSettingsItemClick = fun(_: ActionEvent) {
+        val psForm = ParserSettingsForm()
+        psForm.setSize(250, 100)
+        form.title = "Parser Settings"
+        val psController = ParserSettingsController(psForm, parserSettings)
+        psController.run()
     }
 
     private fun saveProjectFile() {
