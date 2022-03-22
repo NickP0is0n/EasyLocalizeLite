@@ -20,6 +20,8 @@ class LocalizeParser(val settings: ParserSettings) {
         var isCommentMultilined = false
         var isHeaderAlreadyExist = false
 
+        parsedStrings.clear()
+
         while (reader.readLine().also { currentLine = it } != null) {
             when {
                 isAComment(currentLine!!) -> {

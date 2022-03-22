@@ -18,14 +18,15 @@ import java.awt.event.ActionEvent
 import java.io.*
 
 class MainController(val form: MainForm) {
-    private val list = mutableListOf(LocalizedString("No file is currently loaded.", "", ""))
+    private val list = hashMapOf(Pair("Original", mutableListOf(LocalizedString("No file is currently loaded.", "", ""))))
+        //mutableListOf(LocalizedString("No file is currently loaded.", "", ""))
     private var currentSaveFile: File? = null
     private val parserSettings = ParserSettings()
     private val parser = LocalizeParser(parserSettings)
     private val model = StringIDListModel()
 
     fun run() {
-        model.setElements(list.filter {
+        model.setElements(list[form.currentLanguage]!!.filter {
             it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
         })
         form.setStringIDList(model)
@@ -50,9 +51,11 @@ class MainController(val form: MainForm) {
         openDialog.isVisible = true
         if (openDialog.files.isEmpty()) {
             form.setTitle(AppInfo.windowTitle)
+            form.resetLanguageSelector()
             list.also {
                 it.clear()
-            }.add(LocalizedString("No file is currently loaded.", "", ""))
+                it["Original"] = mutableListOf()
+            }["Original"]!!.add(LocalizedString("No file is currently loaded.", "", ""))
         }
         else {
             form.setTitle(AppInfo.windowTitle + " – " + openDialog.files[0].name)
@@ -61,7 +64,7 @@ class MainController(val form: MainForm) {
                 ObjectInputStream(FileInputStream(currentSaveFile!!)).use {
                     list.also {
                         it.clear()
-                    }.addAll(it.readObject() as List<LocalizedString>)
+                    }.putAll(it.readObject() as Map<String, MutableList<LocalizedString>>)
                 }
             }
             else {
@@ -69,10 +72,11 @@ class MainController(val form: MainForm) {
                 val stringFile = openDialog.files[0]
                 list.also {
                     it.clear()
-                }.addAll(try { parser.fromFile(stringFile) } catch (e: IOException) { listOf(LocalizedString("No file loaded", "", ""))})
+                    it["Original"] = mutableListOf()
+                }["Original"]!!.addAll(try { parser.fromFile(stringFile) } catch (e: IOException) { listOf(LocalizedString("No file loaded", "", ""))})
             }
         }
-        model.setElements(list)
+        model.setElements(list["Original"]!!)
     }
 
     private val onSelectLanguageButtonClick = fun(_: ActionEvent) {
@@ -105,17 +109,21 @@ class MainController(val form: MainForm) {
         }
 
         if (exportFile != null) {
-            if (!exportFile.exists()) {
-                exportFile.createNewFile()
+            list.keys.forEach {
+                val saveFile = File("${exportFile.absolutePath.removeSuffix(".${exportFile.extension}")}_$it.${exportFile.extension}")
+                if (!saveFile.exists()) {
+                    saveFile.createNewFile()
+                }
+                exporter.toFile(list[it]!!, saveFile)
             }
-            exporter.toFile(list, exportFile)
+
             val notificator = DialogNotificationSender()
-            notificator.send("Success", "Localization file has been successfully exported.")
+            notificator.send("Success", "Localization files have been successfully exported.")
         }
     }
 
     private val onCopyButtonClick = fun(_: ActionEvent) {
-        val selection = StringSelection(list[form.stringIDListCurrentSelectionIndex].toString())
+        val selection = StringSelection(list[form.currentLanguage]!![form.stringIDListCurrentSelectionIndex].toString())
         Toolkit.getDefaultToolkit().systemClipboard.setContents(selection, null)
     }
 
@@ -124,7 +132,7 @@ class MainController(val form: MainForm) {
     }
 
     private val onSearchBarEdit = fun() {
-        model.setElements(list.filter {
+        model.setElements(list[form.currentLanguage]!!.filter {
             it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
         })
     }
@@ -158,14 +166,14 @@ class MainController(val form: MainForm) {
 
     val onStringEdit = fun() {
         val currentString = model.list[form.stringIDListCurrentSelectionIndex]
-        list[list.indexOf(list.find { it.id == currentString.id })] = LocalizedString(
+        list[form.currentLanguage]!![list[form.currentLanguage]!!.indexOf(list[form.currentLanguage]!!.find { it.id == currentString.id })] = LocalizedString(
             currentString.id,
             form.stringAreaText,
             currentString.comment,
             mark = currentString.mark,
             copyrightHeader = currentString.copyrightHeader
         )
-        model.setElements(list.filter {
+        model.setElements(list[form.currentLanguage]!!.filter {
             it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
         })
         saveProjectFile()
