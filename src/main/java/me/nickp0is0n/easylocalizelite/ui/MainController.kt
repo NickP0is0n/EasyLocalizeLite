@@ -67,6 +67,7 @@ class MainController(val form: MainForm) {
                     list.also {
                         it.clear()
                     }.putAll(it.readObject() as Map<String, MutableList<LocalizedString>>)
+                    form.setLanguageSelectorContent(list.keys.toList() as ArrayList<String>)
                 }
             }
             else {
@@ -89,8 +90,10 @@ class MainController(val form: MainForm) {
         model.setElements(list[form.currentLanguage]!!.filter {
             it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
         })
-        form.setStringAreaText(model.list[form.stringIDListCurrentSelectionIndex].text)
-        form.setCommentAreaText(model.list[form.stringIDListCurrentSelectionIndex].comment)
+        if (form.stringIDListCurrentSelectionIndex != -1) {
+            form.setStringAreaText(model.list[form.stringIDListCurrentSelectionIndex].text)
+            form.setCommentAreaText(model.list[form.stringIDListCurrentSelectionIndex].comment)
+        }
     }
 
     private val onAddNewLanguageButtonClick = fun(_: ActionEvent) {
