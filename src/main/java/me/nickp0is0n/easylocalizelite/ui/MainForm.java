@@ -20,6 +20,9 @@ public class MainForm extends JFrame {
     private JTextField searchTextField;
     private JButton searchButton;
     private JPanel searchBarPanel;
+    private JButton selectLanguageButton;
+    private JComboBox languageSelector;
+    private JButton addNewLanguageButton;
 
     private JMenuBar menuBar;
     private JMenu fileMenu, toolsMenu;
@@ -107,6 +110,15 @@ public class MainForm extends JFrame {
 
     public void setSearchButtonOnClickListener(ActionListener listener) {
         searchButton.addActionListener(listener);
+    }
+
+    public void setSelectLanguageButtonOnClickListener(ActionListener listener) {
+        selectLanguageButton.addActionListener(listener);
+    }
+
+    public void switchLanguageSelectionVisibility() {
+        addNewLanguageButton.setVisible(!addNewLanguageButton.isVisible());
+        languageSelector.setVisible(!languageSelector.isVisible());
     }
 
     public String getStringAreaText() {
@@ -212,6 +224,19 @@ public class MainForm extends JFrame {
         searchButton.setOpaque(false);
         searchButton.setText("");
         panel1.add(searchButton, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_EAST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, new Dimension(30, 30), 0, false));
+        selectLanguageButton = new JButton();
+        selectLanguageButton.setText("Select language...");
+        panel1.add(selectLanguageButton, new com.intellij.uiDesigner.core.GridConstraints(1, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        languageSelector = new JComboBox();
+        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
+        defaultComboBoxModel1.addElement("Original");
+        languageSelector.setModel(defaultComboBoxModel1);
+        languageSelector.setVisible(false);
+        panel1.add(languageSelector, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        addNewLanguageButton = new JButton();
+        addNewLanguageButton.setText("Add new language");
+        addNewLanguageButton.setVisible(false);
+        panel1.add(addNewLanguageButton, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

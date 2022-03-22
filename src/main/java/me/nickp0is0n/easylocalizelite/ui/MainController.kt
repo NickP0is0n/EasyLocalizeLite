@@ -42,6 +42,7 @@ class MainController(val form: MainForm) {
         form.setSearchButtonOnClickListener(onSearchButtonClick)
         form.setSearchBarOnEditListener(onSearchBarEdit)
         form.setParserSettingsMenuItemOnClickListener(onParserSettingsItemClick)
+        form.setSelectLanguageButtonOnClickListener(onSelectLanguageButtonClick)
     }
 
     private val onOpenItemClick = fun(_: ActionEvent) {
@@ -72,6 +73,10 @@ class MainController(val form: MainForm) {
             }
         }
         model.setElements(list)
+    }
+
+    private val onSelectLanguageButtonClick = fun(_: ActionEvent) {
+        form.switchLanguageSelectionVisibility()
     }
 
     private val onSaveAsItemClick = fun(_: ActionEvent) {
