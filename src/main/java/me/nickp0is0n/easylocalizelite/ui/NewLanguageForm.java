@@ -3,17 +3,20 @@ package me.nickp0is0n.easylocalizelite.ui;
 import javax.swing.*;
 import java.awt.*;
 
-public class NewLanguageForm extends JFrame {
+public class NewLanguageForm extends JDialog {
     private JButton OKButton;
     private JTextField languageTitleField;
     private JButton cancelButton;
+    private JPanel panel1;
 
     private String languageTitle = null;
 
     public NewLanguageForm() {
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        //setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setContentPane(panel1);
         setResizable(false);
-        setVisible(true);
+        pack();
+        setModal(true);
 
         cancelButton.addActionListener((e -> {
             this.setVisible(false);
@@ -21,10 +24,18 @@ public class NewLanguageForm extends JFrame {
         }));
 
         OKButton.addActionListener((e -> {
-            this.languageTitle = languageTitleField.getText();
+            if (!languageTitleField.getText().isEmpty()) {
+                this.languageTitle = languageTitleField.getText();
+            }
             this.setVisible(false);
             this.dispose();
         }));
+
+        setVisible(true);
+    }
+
+    public String getLanguageTitle() {
+        return languageTitle;
     }
 
     {
@@ -42,8 +53,9 @@ public class NewLanguageForm extends JFrame {
      * @noinspection ALL
      */
     private void $$$setupUI$$$() {
-        final JPanel panel1 = new JPanel();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel1 = new JPanel();
+        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 2, new Insets(10, 10, 10, 10), -1, -1));
+        panel1.setPreferredSize(new Dimension(250, 150));
         final JLabel label1 = new JLabel();
         label1.setText("Enter the title for new language...");
         panel1.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -56,4 +68,12 @@ public class NewLanguageForm extends JFrame {
         cancelButton.setText("Cancel");
         panel1.add(cancelButton, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return panel1;
+    }
+
 }

@@ -44,6 +44,8 @@ class MainController(val form: MainForm) {
         form.setSearchBarOnEditListener(onSearchBarEdit)
         form.setParserSettingsMenuItemOnClickListener(onParserSettingsItemClick)
         form.setSelectLanguageButtonOnClickListener(onSelectLanguageButtonClick)
+        form.setAddNewLanguageButtonOnClickListener(onAddNewLanguageButtonClick)
+        form.setLanguageSelectorListener(onLanguageSelectorValueChange)
     }
 
     private val onOpenItemClick = fun(_: ActionEvent) {
@@ -81,6 +83,22 @@ class MainController(val form: MainForm) {
 
     private val onSelectLanguageButtonClick = fun(_: ActionEvent) {
         form.switchLanguageSelectionVisibility()
+    }
+
+    private val onLanguageSelectorValueChange = fun() {
+        model.setElements(list[form.currentLanguage]!!.filter {
+            it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
+        })
+        form.setStringAreaText(model.list[form.stringIDListCurrentSelectionIndex].text)
+        form.setCommentAreaText(model.list[form.stringIDListCurrentSelectionIndex].comment)
+    }
+
+    private val onAddNewLanguageButtonClick = fun(_: ActionEvent) {
+        val newLanguageForm = NewLanguageForm()
+        if (newLanguageForm.languageTitle != null) {
+            list[newLanguageForm.languageTitle] = list["Original"]!!.toMutableList()
+            form.setLanguageSelectorContent(list.keys.toList() as ArrayList<String>)
+        }
     }
 
     private val onSaveAsItemClick = fun(_: ActionEvent) {

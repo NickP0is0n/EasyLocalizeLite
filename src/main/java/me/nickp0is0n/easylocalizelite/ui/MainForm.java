@@ -8,6 +8,8 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainForm extends JFrame {
@@ -116,9 +118,28 @@ public class MainForm extends JFrame {
         selectLanguageButton.addActionListener(listener);
     }
 
+    public void setAddNewLanguageButtonOnClickListener(ActionListener listener) {
+        addNewLanguageButton.addActionListener(listener);
+    }
+
     public void switchLanguageSelectionVisibility() {
         addNewLanguageButton.setVisible(!addNewLanguageButton.isVisible());
         languageSelector.setVisible(!languageSelector.isVisible());
+    }
+
+    public void setLanguageSelectorListener(Runnable listener) {
+        languageSelector.addItemListener((e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                listener.run();
+            }
+        }));
+    }
+
+    public void setLanguageSelectorContent(ArrayList<String> content) {
+        languageSelector.removeAllItems();
+        content.forEach((item -> {
+            languageSelector.addItem(item);
+        }));
     }
 
     public String getStringAreaText() {
