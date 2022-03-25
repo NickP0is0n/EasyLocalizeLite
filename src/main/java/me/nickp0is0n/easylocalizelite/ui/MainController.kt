@@ -51,6 +51,7 @@ class MainController(val form: MainForm) {
     private val onOpenItemClick = fun(_: ActionEvent) {
         val openDialog = FileDialog(form)
         openDialog.isVisible = true
+        currentSaveFile = null
         if (openDialog.files.isEmpty()) {
             form.setTitle(AppInfo.windowTitle)
             form.resetLanguageSelector()
@@ -76,7 +77,6 @@ class MainController(val form: MainForm) {
                 }
             }
             else {
-                currentSaveFile = null
                 val stringFile = openDialog.files[0]
                 list.also {
                     it.clear()
