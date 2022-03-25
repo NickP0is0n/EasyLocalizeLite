@@ -117,6 +117,7 @@ class MainController(val form: MainForm) {
         if (saveDialog.files.isNotEmpty()) {
             currentSaveFile = saveDialog.files[0]
             saveProjectFile()
+            form.setTitle(AppInfo.windowTitle + " – " + saveDialog.files[0].name)
         }
     }
 
