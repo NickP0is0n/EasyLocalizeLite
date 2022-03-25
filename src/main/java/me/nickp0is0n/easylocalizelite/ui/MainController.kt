@@ -64,10 +64,15 @@ class MainController(val form: MainForm) {
             if (openDialog.files[0].extension == "elproject") {
                 currentSaveFile = openDialog.files[0]
                 ObjectInputStream(FileInputStream(currentSaveFile!!)).use {
-                    list.also {
-                        it.clear()
-                    }.putAll(it.readObject() as Map<String, MutableList<LocalizedString>>)
-                    form.setLanguageSelectorContent(list.keys.toList() as ArrayList<String>)
+                    val rawSaveData = it.readObject()
+                    list.clear()
+                    if (rawSaveData is MutableList<*>) { //backwards compatibility with 0.3.* and under
+                        list["Original"] = (rawSaveData as MutableList<LocalizedString>).toMutableList()
+                    }
+                    else {
+                        list.putAll(rawSaveData as Map<String, MutableList<LocalizedString>>)
+                    }
+                    form.setLanguageSelectorContent(ArrayList(list.keys.toList()))
                 }
             }
             else {
