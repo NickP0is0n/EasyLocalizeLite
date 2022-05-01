@@ -21,7 +21,7 @@ public class EasyLocalize {
         form.setSize(640, 480);
         form.setTitle(AppInfo.INSTANCE.getWindowTitle());
         MainController controller = new MainController(form);
-        if (macFileHandler.openedFiles.size() > 0) {
+        if (macFileHandler.openedFiles != null) {
             controller.setAssociatedFile(macFileHandler.openedFiles.get(0));
         }
         controller.run();
