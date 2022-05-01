@@ -6,7 +6,6 @@ import me.nickp0is0n.easylocalizelite.ui.MainForm;
 import me.nickp0is0n.easylocalizelite.utils.AppInfo;
 import me.nickp0is0n.easylocalizelite.utils.MacFileHandler;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class EasyLocalize {
@@ -22,6 +21,9 @@ public class EasyLocalize {
         form.setSize(640, 480);
         form.setTitle(AppInfo.INSTANCE.getWindowTitle());
         MainController controller = new MainController(form);
+        if (macFileHandler.openedFiles.size() > 0) {
+            controller.setAssociatedFile(macFileHandler.openedFiles.get(0));
+        }
         controller.run();
     }
 }

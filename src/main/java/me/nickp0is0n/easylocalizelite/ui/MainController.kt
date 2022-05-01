@@ -24,6 +24,7 @@ class MainController(val form: MainForm) {
     private val parserSettings = ParserSettings()
     private val parser = LocalizeParser(parserSettings)
     private val model = StringIDListModel()
+    var associatedFile: File? = null
 
     fun run() {
         model.setElements(list[form.currentLanguage]!!.filter {
@@ -46,6 +47,10 @@ class MainController(val form: MainForm) {
         form.setSelectLanguageButtonOnClickListener(onSelectLanguageButtonClick)
         form.setAddNewLanguageButtonOnClickListener(onAddNewLanguageButtonClick)
         form.setLanguageSelectorListener(onLanguageSelectorValueChange)
+
+        if (associatedFile != null) {
+            showFileContent(associatedFile!!)
+        }
     }
 
     private val onOpenItemClick = fun(_: ActionEvent) {
@@ -61,30 +66,38 @@ class MainController(val form: MainForm) {
             }["Original"]!!.add(LocalizedString("No file is currently loaded.", "", ""))
         }
         else {
-            form.setTitle(AppInfo.windowTitle + " – " + openDialog.files[0].name)
-            if (openDialog.files[0].extension == "elproject") {
-                currentSaveFile = openDialog.files[0]
-                ObjectInputStream(FileInputStream(currentSaveFile!!)).use {
-                    val rawSaveData = it.readObject()
-                    list.clear()
-                    if (rawSaveData is MutableList<*>) { //backwards compatibility with 0.3.* and under
-                        list["Original"] = (rawSaveData as MutableList<LocalizedString>).toMutableList()
-                    }
-                    else {
-                        list.putAll(rawSaveData as Map<String, MutableList<LocalizedString>>)
-                    }
-                    form.setLanguageSelectorContent(ArrayList(list.keys.toList()))
-                }
-            }
-            else {
-                val stringFile = openDialog.files[0]
-                list.also {
-                    it.clear()
-                    it["Original"] = mutableListOf()
-                }["Original"]!!.addAll(try { parser.fromFile(stringFile) } catch (e: IOException) { listOf(LocalizedString("No file loaded", "", ""))})
-            }
+            showFileContent(openDialog.files[0])
         }
         model.setElements(list["Original"]!!)
+    }
+
+    private fun showFileContent(currentFile: File) {
+        form.setTitle(AppInfo.windowTitle + " – " + currentFile.name)
+        if (currentFile.extension == "elproject") {
+            currentSaveFile = currentFile
+            ObjectInputStream(FileInputStream(currentSaveFile!!)).use {
+                val rawSaveData = it.readObject()
+                list.clear()
+                if (rawSaveData is MutableList<*>) { //backwards compatibility with 0.3.* and under
+                    list["Original"] = (rawSaveData as MutableList<LocalizedString>).toMutableList()
+                } else {
+                    list.putAll(rawSaveData as Map<String, MutableList<LocalizedString>>)
+                }
+                form.setLanguageSelectorContent(ArrayList(list.keys.toList()))
+            }
+        } else {
+            val stringFile = currentFile
+            list.also {
+                it.clear()
+                it["Original"] = mutableListOf()
+            }["Original"]!!.addAll(
+                try {
+                    parser.fromFile(stringFile)
+                } catch (e: IOException) {
+                    listOf(LocalizedString("No file loaded", "", ""))
+                }
+            )
+        }
     }
 
     private val onSelectLanguageButtonClick = fun(_: ActionEvent) {
