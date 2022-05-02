@@ -1,12 +1,16 @@
 package me.nickp0is0n.easylocalizelite;
 
 import com.formdev.flatlaf.intellijthemes.FlatOneDarkIJTheme;
+import me.nickp0is0n.easylocalizelite.network.QueryClient;
+import me.nickp0is0n.easylocalizelite.network.TranslationRequest;
 import me.nickp0is0n.easylocalizelite.ui.MainController;
 import me.nickp0is0n.easylocalizelite.ui.MainForm;
 import me.nickp0is0n.easylocalizelite.utils.AppInfo;
 import me.nickp0is0n.easylocalizelite.utils.MacFileHandler;
 
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class EasyLocalize {
     public static void main(String[] args) {
