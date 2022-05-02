@@ -18,14 +18,14 @@ class QueryClient (val url: URL) {
         val client = OkHttpClient()
         val mediaType = "application/json; charset=utf-8".toMediaType()
         val body = node.toPrettyString().toRequestBody(mediaType)
-        val request: Request = Request.Builder()
+        val webRequest: Request = Request.Builder()
             .url(url)
             .post(body)
             .build()
 
         var response: Response? = null
         try {
-            response = client.newCall(request).execute()
+            response = client.newCall(webRequest).execute()
         } catch (e: IOException) {
             e.printStackTrace()
         }
