@@ -24,6 +24,7 @@ class MainController(val form: MainForm) {
     private val parserSettings = ParserSettings()
     private val parser = LocalizeParser(parserSettings)
     private val model = StringIDListModel()
+    private var autoTranslationEnabled = false
     var associatedFile: File? = null
 
     fun run() {
@@ -47,6 +48,7 @@ class MainController(val form: MainForm) {
         form.setSelectLanguageButtonOnClickListener(onSelectLanguageButtonClick)
         form.setAddNewLanguageButtonOnClickListener(onAddNewLanguageButtonClick)
         form.setLanguageSelectorListener(onLanguageSelectorValueChange)
+        form.setEnableTranslationsMenuItemOnClickListener(onEnableAutoTranslationItemClick)
 
         if (associatedFile != null) {
             showFileContent(associatedFile!!)
@@ -183,6 +185,12 @@ class MainController(val form: MainForm) {
         form.title = "Parser Settings"
         val psController = ParserSettingsController(psForm, parserSettings)
         psController.run()
+    }
+
+    private val onEnableAutoTranslationItemClick = fun(_: ActionEvent) {
+        //TODO: functionality for auto-translation UI elements
+        form.setEnableTranslationsMenuItemName(if (autoTranslationEnabled) "Enable auto-translation (beta)" else "Disable auto-translation")
+        autoTranslationEnabled = !autoTranslationEnabled
     }
 
     private fun saveProjectFile() {
