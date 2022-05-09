@@ -28,7 +28,11 @@ public class MainForm extends JFrame {
 
     private JMenuBar menuBar;
     private JMenu fileMenu, toolsMenu;
-    private JMenuItem openMenuItem, saveAsMenuItem, parserSettingsMenuItem;
+    private JMenuItem openMenuItem;
+    private JMenuItem saveAsMenuItem;
+    private JMenuItem parserSettingsMenuItem;
+
+    private JMenuItem enableTranslationsMenuItem;
 
     public MainForm() {
         menuBar = new JMenuBar();
@@ -41,7 +45,10 @@ public class MainForm extends JFrame {
 
         toolsMenu = new JMenu("Tools");
         parserSettingsMenuItem = new JMenuItem("Parser settings");
+        enableTranslationsMenuItem = new JMenuItem("Enable auto-translation (beta)");
+
         toolsMenu.add(parserSettingsMenuItem);
+        toolsMenu.add(enableTranslationsMenuItem);
 
         menuBar.add(fileMenu);
         menuBar.add(toolsMenu);
@@ -84,6 +91,14 @@ public class MainForm extends JFrame {
 
     public void setParserSettingsMenuItemOnClickListener(ActionListener listener) {
         parserSettingsMenuItem.addActionListener(listener);
+    }
+
+    public void setEnableTranslationsMenuItemOnClickListener(ActionListener listener) {
+        enableTranslationsMenuItem.addActionListener(listener);
+    }
+
+    public void setEnableTranslationsMenuItemName(String name) {
+        enableTranslationsMenuItem.setText(name);
     }
 
     public void setExportTranslationsToFileButtonOnClickListener(ActionListener listener) {
