@@ -21,6 +21,9 @@ import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.awt.event.ActionEvent
 import java.io.*
+import java.net.SocketException
+import java.net.UnknownHostException
+import javax.net.ssl.SSLException
 
 class MainController(val form: MainForm) {
     private val list = hashMapOf(Pair("Original", mutableListOf(LocalizedString("No file is currently loaded.", "", ""))))
@@ -209,9 +212,14 @@ class MainController(val form: MainForm) {
                     form.setStringAreaText(response.translatedText)
                 }
             }
-            catch (e: ValueInstantiationException) {
+            catch (_: ValueInstantiationException) {
                 val notificator = DialogNotificationSender()
                 notificator.send("Error", "Current language is not supported at the moment.")
+            }
+            //TODO: More adequate way to handle absent internet connection
+            catch (_: Exception) {
+                val notificator = DialogNotificationSender()
+                notificator.send("Error", "Connection to translation server could not be established.")
             }
         }
     }
