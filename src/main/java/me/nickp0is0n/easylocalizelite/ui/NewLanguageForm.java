@@ -16,6 +16,7 @@ public class NewLanguageForm extends JDialog {
         setContentPane(panel1);
         setResizable(false);
         pack();
+        setLocationRelativeTo(null);
         setModal(true);
 
         cancelButton.addActionListener((e -> {

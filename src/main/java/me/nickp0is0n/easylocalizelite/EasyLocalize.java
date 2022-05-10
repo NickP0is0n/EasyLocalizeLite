@@ -18,7 +18,6 @@ public class EasyLocalize {
         } catch (Exception ignored) {}
         FlatOneDarkIJTheme.setup();
         MainForm form = new MainForm();
-        form.setSize(640, 480);
         form.setTitle(AppInfo.INSTANCE.getWindowTitle());
         MainController controller = new MainController(form);
         if (macFileHandler.openedFiles != null) {

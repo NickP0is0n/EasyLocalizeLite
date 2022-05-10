@@ -12,6 +12,8 @@ public class ParserSettingsForm extends JFrame {
 
     public ParserSettingsForm() {
         setContentPane(panel1);
+        pack();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 

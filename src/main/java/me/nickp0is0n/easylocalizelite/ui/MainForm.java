@@ -49,6 +49,8 @@ public class MainForm extends JFrame {
         setJMenuBar(menuBar);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(panel1);
+        setSize(700, 480);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
