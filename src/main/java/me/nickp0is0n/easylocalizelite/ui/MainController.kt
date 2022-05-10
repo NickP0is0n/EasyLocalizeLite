@@ -1,5 +1,7 @@
 package me.nickp0is0n.easylocalizelite.ui
 
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException
+import com.neovisionaries.i18n.LanguageCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -7,6 +9,9 @@ import kotlinx.coroutines.withContext
 import me.nickp0is0n.easylocalizelite.models.LocalizedString
 import me.nickp0is0n.easylocalizelite.models.ParserSettings
 import me.nickp0is0n.easylocalizelite.models.StringIDListModel
+import me.nickp0is0n.easylocalizelite.network.QueryClient
+import me.nickp0is0n.easylocalizelite.network.ResponseFromJSONConverter
+import me.nickp0is0n.easylocalizelite.network.TranslationRequest
 import me.nickp0is0n.easylocalizelite.utils.AppInfo
 import me.nickp0is0n.easylocalizelite.utils.DialogNotificationSender
 import me.nickp0is0n.easylocalizelite.utils.LocalizeExporter
@@ -49,6 +54,7 @@ class MainController(val form: MainForm) {
         form.setAddNewLanguageButtonOnClickListener(onAddNewLanguageButtonClick)
         form.setLanguageSelectorListener(onLanguageSelectorValueChange)
         form.setEnableTranslationsMenuItemOnClickListener(onEnableAutoTranslationItemClick)
+        form.setTranslateButtonOnClickListener(onTranslationButtonClick)
 
         if (associatedFile != null) {
             showFileContent(associatedFile!!)
@@ -188,9 +194,26 @@ class MainController(val form: MainForm) {
     }
 
     private val onEnableAutoTranslationItemClick = fun(_: ActionEvent) {
-        //TODO: functionality for auto-translation UI elements
         form.setEnableTranslationsMenuItemName(if (autoTranslationEnabled) "Enable auto-translation (beta)" else "Disable auto-translation")
         autoTranslationEnabled = !autoTranslationEnabled
+        form.switchTranslateButtonVisibility()
+    }
+
+    private val onTranslationButtonClick = fun(_: ActionEvent) {
+        if (autoTranslationEnabled) {
+            val queryClient = QueryClient(AppInfo.autoTranslateUrl)
+            val request = TranslationRequest(form.stringAreaText, "auto", LanguageCode.findByName(form.currentLanguage)[0].name)
+            try {
+                val response = ResponseFromJSONConverter().convert(queryClient.doQuery(request))
+                if (response != null) {
+                    form.setStringAreaText(response.translatedText)
+                }
+            }
+            catch (e: ValueInstantiationException) {
+                val notificator = DialogNotificationSender()
+                notificator.send("Error", "Current language is not supported at the moment.")
+            }
+        }
     }
 
     private fun saveProjectFile() {
