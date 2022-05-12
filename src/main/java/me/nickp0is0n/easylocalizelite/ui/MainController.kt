@@ -1,5 +1,7 @@
 package me.nickp0is0n.easylocalizelite.ui
 
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException
+import com.neovisionaries.i18n.LanguageCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -7,6 +9,9 @@ import kotlinx.coroutines.withContext
 import me.nickp0is0n.easylocalizelite.models.LocalizedString
 import me.nickp0is0n.easylocalizelite.models.ParserSettings
 import me.nickp0is0n.easylocalizelite.models.StringIDListModel
+import me.nickp0is0n.easylocalizelite.network.QueryClient
+import me.nickp0is0n.easylocalizelite.network.ResponseFromJSONConverter
+import me.nickp0is0n.easylocalizelite.network.TranslationRequest
 import me.nickp0is0n.easylocalizelite.utils.AppInfo
 import me.nickp0is0n.easylocalizelite.utils.DialogNotificationSender
 import me.nickp0is0n.easylocalizelite.utils.LocalizeExporter
@@ -16,6 +21,10 @@ import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.awt.event.ActionEvent
 import java.io.*
+import java.net.SocketException
+import java.net.UnknownHostException
+import javax.net.ssl.SSLException
+import javax.swing.Action
 
 class MainController(val form: MainForm) {
     private val list = hashMapOf(Pair("Original", mutableListOf(LocalizedString("No file is currently loaded.", "", ""))))
@@ -24,6 +33,7 @@ class MainController(val form: MainForm) {
     private val parserSettings = ParserSettings()
     private val parser = LocalizeParser(parserSettings)
     private val model = StringIDListModel()
+    private var autoTranslationEnabled = false
     var associatedFile: File? = null
 
     fun run() {
@@ -47,6 +57,9 @@ class MainController(val form: MainForm) {
         form.setSelectLanguageButtonOnClickListener(onSelectLanguageButtonClick)
         form.setAddNewLanguageButtonOnClickListener(onAddNewLanguageButtonClick)
         form.setLanguageSelectorListener(onLanguageSelectorValueChange)
+        form.setEnableTranslationsMenuItemOnClickListener(onEnableAutoTranslationItemClick)
+        form.setAutoTranslateLanguageListMenuItemOnClickListener(onAutoTranslateLanguageListItemClick)
+        form.setTranslateButtonOnClickListener(onTranslationButtonClick)
 
         if (associatedFile != null) {
             showFileContent(associatedFile!!)
@@ -183,6 +196,39 @@ class MainController(val form: MainForm) {
         form.title = "Parser Settings"
         val psController = ParserSettingsController(psForm, parserSettings)
         psController.run()
+    }
+
+    private val onEnableAutoTranslationItemClick = fun(_: ActionEvent) {
+        form.setEnableTranslationsMenuItemName(if (autoTranslationEnabled) "Enable auto-translation (beta)" else "Disable auto-translation")
+        autoTranslationEnabled = !autoTranslationEnabled
+        form.switchTranslateButtonVisibility()
+    }
+
+    private val onAutoTranslateLanguageListItemClick = fun(_: ActionEvent) {
+        val notificator = DialogNotificationSender()
+        notificator.send("Available languages", "Currently, auto-translate functionality is in beta and available for selected languages:\nEnglish, Arabic, Azerbaijani, Chinese, Czech, Dutch, Finnish, French, German, Hindi, Hungarian, Indonesian, Irish, Italian, Japanese, Korean, Polish, Portuguese, Russian, Spanish, Swedish, Turkish, Ukrainian, Vietnamese.\n\nTranslation is powered by LibreTranslate API (AGPLv3 license).")
+    }
+
+    private val onTranslationButtonClick = fun(_: ActionEvent) {
+        if (autoTranslationEnabled) {
+            val queryClient = QueryClient(AppInfo.autoTranslateUrl)
+            val request = TranslationRequest(form.stringAreaText, "auto", LanguageCode.findByName(form.currentLanguage)[0].name)
+            try {
+                val response = ResponseFromJSONConverter().convert(queryClient.doQuery(request))
+                if (response != null) {
+                    form.setStringAreaText(response.translatedText)
+                }
+            }
+            catch (_: ValueInstantiationException) {
+                val notificator = DialogNotificationSender()
+                notificator.send("Error", "Current language is not supported at the moment.")
+            }
+            //TODO: More adequate way to handle absent internet connection
+            catch (_: Exception) {
+                val notificator = DialogNotificationSender()
+                notificator.send("Error", "Connection to translation server could not be established.")
+            }
+        }
     }
 
     private fun saveProjectFile() {

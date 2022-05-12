@@ -165,6 +165,15 @@
           <visible value="false"/>
         </properties>
       </component>
+      <component id="d4635" class="javax.swing.JButton" binding="translateButton">
+        <constraints>
+          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Translate (beta)"/>
+          <visible value="false"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

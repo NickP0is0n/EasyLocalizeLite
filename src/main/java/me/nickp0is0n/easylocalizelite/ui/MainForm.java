@@ -25,10 +25,16 @@ public class MainForm extends JFrame {
     private JButton selectLanguageButton;
     private JComboBox languageSelector;
     private JButton addNewLanguageButton;
+    private JButton translateButton;
 
     private JMenuBar menuBar;
     private JMenu fileMenu, toolsMenu;
-    private JMenuItem openMenuItem, saveAsMenuItem, parserSettingsMenuItem;
+    private JMenuItem openMenuItem;
+    private JMenuItem saveAsMenuItem;
+    private JMenuItem parserSettingsMenuItem;
+
+    private JMenuItem enableTranslationsMenuItem;
+    private JMenuItem autoTranslateLanguageListMenuItem;
 
     public MainForm() {
         menuBar = new JMenuBar();
@@ -41,7 +47,13 @@ public class MainForm extends JFrame {
 
         toolsMenu = new JMenu("Tools");
         parserSettingsMenuItem = new JMenuItem("Parser settings");
+        enableTranslationsMenuItem = new JMenuItem("Enable auto-translation (beta)");
+        autoTranslateLanguageListMenuItem = new JMenuItem("Available languages for auto-translation");
+
         toolsMenu.add(parserSettingsMenuItem);
+        toolsMenu.addSeparator();
+        toolsMenu.add(enableTranslationsMenuItem);
+        toolsMenu.add(autoTranslateLanguageListMenuItem);
 
         menuBar.add(fileMenu);
         menuBar.add(toolsMenu);
@@ -88,6 +100,18 @@ public class MainForm extends JFrame {
         parserSettingsMenuItem.addActionListener(listener);
     }
 
+    public void setEnableTranslationsMenuItemOnClickListener(ActionListener listener) {
+        enableTranslationsMenuItem.addActionListener(listener);
+    }
+
+    public void setAutoTranslateLanguageListMenuItemOnClickListener(ActionListener listener) {
+        autoTranslateLanguageListMenuItem.addActionListener(listener);
+    }
+
+    public void setEnableTranslationsMenuItemName(String name) {
+        enableTranslationsMenuItem.setText(name);
+    }
+
     public void setExportTranslationsToFileButtonOnClickListener(ActionListener listener) {
         exportTranslationsToFileButton.addActionListener(listener);
     }
@@ -122,6 +146,14 @@ public class MainForm extends JFrame {
 
     public void setAddNewLanguageButtonOnClickListener(ActionListener listener) {
         addNewLanguageButton.addActionListener(listener);
+    }
+
+    public void setTranslateButtonOnClickListener(ActionListener listener) {
+        translateButton.addActionListener(listener);
+    }
+
+    public void switchTranslateButtonVisibility() {
+        translateButton.setVisible(!translateButton.isVisible());
     }
 
     public void switchLanguageSelectionVisibility() {
@@ -269,6 +301,10 @@ public class MainForm extends JFrame {
         addNewLanguageButton.setText("Add new language");
         addNewLanguageButton.setVisible(false);
         panel1.add(addNewLanguageButton, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        translateButton = new JButton();
+        translateButton.setText("Translate (beta)");
+        translateButton.setVisible(false);
+        panel1.add(translateButton, new com.intellij.uiDesigner.core.GridConstraints(3, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
