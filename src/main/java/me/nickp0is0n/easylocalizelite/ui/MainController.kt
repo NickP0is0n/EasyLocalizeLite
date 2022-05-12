@@ -24,6 +24,7 @@ import java.io.*
 import java.net.SocketException
 import java.net.UnknownHostException
 import javax.net.ssl.SSLException
+import javax.swing.Action
 
 class MainController(val form: MainForm) {
     private val list = hashMapOf(Pair("Original", mutableListOf(LocalizedString("No file is currently loaded.", "", ""))))
@@ -57,6 +58,7 @@ class MainController(val form: MainForm) {
         form.setAddNewLanguageButtonOnClickListener(onAddNewLanguageButtonClick)
         form.setLanguageSelectorListener(onLanguageSelectorValueChange)
         form.setEnableTranslationsMenuItemOnClickListener(onEnableAutoTranslationItemClick)
+        form.setAutoTranslateLanguageListMenuItemOnClickListener(onAutoTranslateLanguageListItemClick)
         form.setTranslateButtonOnClickListener(onTranslationButtonClick)
 
         if (associatedFile != null) {
@@ -200,6 +202,11 @@ class MainController(val form: MainForm) {
         form.setEnableTranslationsMenuItemName(if (autoTranslationEnabled) "Enable auto-translation (beta)" else "Disable auto-translation")
         autoTranslationEnabled = !autoTranslationEnabled
         form.switchTranslateButtonVisibility()
+    }
+
+    private val onAutoTranslateLanguageListItemClick = fun(_: ActionEvent) {
+        val notificator = DialogNotificationSender()
+        notificator.send("Available languages", "Currently, auto-translate functionality is in beta and available for selected languages:\nEnglish, Arabic, Azerbaijani, Chinese, Czech, Dutch, Finnish, French, German, Hindi, Hungarian, Indonesian, Irish, Italian, Japanese, Korean, Polish, Portuguese, Russian, Spanish, Swedish, Turkish, Ukrainian, Vietnamese.\n\nTranslation is powered by LibreTranslate API (AGPLv3 license).")
     }
 
     private val onTranslationButtonClick = fun(_: ActionEvent) {
