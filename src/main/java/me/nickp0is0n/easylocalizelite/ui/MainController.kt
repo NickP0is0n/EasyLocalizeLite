@@ -42,7 +42,7 @@ class MainController(val form: MainForm) {
         })
         form.setStringIDList(model)
         form.setStringIDListListener {
-            form.setStringAreaText(model.list[form.stringIDListCurrentSelectionIndex].text)
+            form.stringAreaText = model.list[form.stringIDListCurrentSelectionIndex].text
             form.setCommentAreaText(model.list[form.stringIDListCurrentSelectionIndex].comment)
         }
 
@@ -71,7 +71,7 @@ class MainController(val form: MainForm) {
         openDialog.isVisible = true
         currentSaveFile = null
         if (openDialog.files.isEmpty()) {
-            form.setTitle(AppInfo.windowTitle)
+            form.title = AppInfo.windowTitle
             form.resetLanguageSelector()
             list.also {
                 it.clear()
@@ -85,7 +85,6 @@ class MainController(val form: MainForm) {
     }
 
     private fun showFileContent(currentFile: File) {
-        form.setTitle(AppInfo.windowTitle + " – " + currentFile.name)
         if (currentFile.extension == "elproject") {
             currentSaveFile = currentFile
             ObjectInputStream(FileInputStream(currentSaveFile!!)).use {
@@ -97,6 +96,7 @@ class MainController(val form: MainForm) {
                     list.putAll(rawSaveData as Map<String, MutableList<LocalizedString>>)
                 }
                 form.setLanguageSelectorContent(ArrayList(list.keys.toList()))
+                form.title = "${currentFile.nameWithoutExtension} – ${form.currentLanguage}"
             }
         } else {
             val stringFile = currentFile
@@ -110,6 +110,7 @@ class MainController(val form: MainForm) {
                     listOf(LocalizedString("No file loaded", "", ""))
                 }
             )
+            form.title = currentFile.name
         }
     }
 
@@ -122,7 +123,7 @@ class MainController(val form: MainForm) {
             it.id.contains(form.searchBarText, ignoreCase = true) || it.text.contains(form.searchBarText, ignoreCase = true) || it.comment.contains(form.searchBarText, ignoreCase = true)
         })
         if (form.stringIDListCurrentSelectionIndex != -1) {
-            form.setStringAreaText(model.list[form.stringIDListCurrentSelectionIndex].text)
+            form.stringAreaText = model.list[form.stringIDListCurrentSelectionIndex].text
             form.setCommentAreaText(model.list[form.stringIDListCurrentSelectionIndex].comment)
         }
     }
@@ -143,7 +144,7 @@ class MainController(val form: MainForm) {
         if (saveDialog.files.isNotEmpty()) {
             currentSaveFile = saveDialog.files[0]
             saveProjectFile()
-            form.setTitle(AppInfo.windowTitle + " – " + saveDialog.files[0].name)
+            form.title = AppInfo.windowTitle + " – " + saveDialog.files[0].name
         }
     }
 
@@ -216,7 +217,7 @@ class MainController(val form: MainForm) {
             try {
                 val response = ResponseFromJSONConverter().convert(queryClient.doQuery(request))
                 if (response != null) {
-                    form.setStringAreaText(response.translatedText)
+                    form.stringAreaText = response.translatedText
                 }
             }
             catch (_: ValueInstantiationException) {
