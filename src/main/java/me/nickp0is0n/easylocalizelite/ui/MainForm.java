@@ -36,6 +36,8 @@ public class MainForm extends JFrame {
     private JMenuItem enableTranslationsMenuItem;
     private JMenuItem autoTranslateLanguageListMenuItem;
 
+    private JMenuItem useCustomLibreTranslateUrl;
+
     public MainForm() {
         menuBar = new JMenuBar();
 
@@ -49,11 +51,14 @@ public class MainForm extends JFrame {
         parserSettingsMenuItem = new JMenuItem("Parser settings");
         enableTranslationsMenuItem = new JMenuItem("Enable auto-translation (beta)");
         autoTranslateLanguageListMenuItem = new JMenuItem("Available languages for auto-translation");
+        useCustomLibreTranslateUrl = new JMenuItem("Use custom LibreTranslate API URL");
 
         toolsMenu.add(parserSettingsMenuItem);
         toolsMenu.addSeparator();
         toolsMenu.add(enableTranslationsMenuItem);
         toolsMenu.add(autoTranslateLanguageListMenuItem);
+        toolsMenu.add(useCustomLibreTranslateUrl);
+
 
         menuBar.add(fileMenu);
         menuBar.add(toolsMenu);
