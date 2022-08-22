@@ -77,6 +77,10 @@ public class MainForm extends JFrame {
         stringIdList.setModel(model);
     }
 
+    public void setUseCustomLibreTranslateUrlMenuItemOnClickListener(ActionListener listener) {
+        useCustomLibreTranslateUrl.addActionListener(listener);
+    }
+
     public void setStringIDListListener(ListSelectionListener listener) {
         stringIdList.addListSelectionListener(listener);
     }

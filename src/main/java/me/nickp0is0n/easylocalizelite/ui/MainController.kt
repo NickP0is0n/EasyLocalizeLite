@@ -12,16 +12,14 @@ import me.nickp0is0n.easylocalizelite.models.StringIDListModel
 import me.nickp0is0n.easylocalizelite.network.QueryClient
 import me.nickp0is0n.easylocalizelite.network.ResponseFromJSONConverter
 import me.nickp0is0n.easylocalizelite.network.TranslationRequest
-import me.nickp0is0n.easylocalizelite.utils.AppInfo
-import me.nickp0is0n.easylocalizelite.utils.DialogNotificationSender
-import me.nickp0is0n.easylocalizelite.utils.LocalizeExporter
-import me.nickp0is0n.easylocalizelite.utils.LocalizeParser
+import me.nickp0is0n.easylocalizelite.utils.*
 import java.awt.FileDialog
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.awt.event.ActionEvent
 import java.io.*
 import java.net.SocketException
+import java.net.URL
 import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 import javax.swing.Action
@@ -60,10 +58,17 @@ class MainController(val form: MainForm) {
         form.setEnableTranslationsMenuItemOnClickListener(onEnableAutoTranslationItemClick)
         form.setAutoTranslateLanguageListMenuItemOnClickListener(onAutoTranslateLanguageListItemClick)
         form.setTranslateButtonOnClickListener(onTranslationButtonClick)
+        form.setUseCustomLibreTranslateUrlMenuItemOnClickListener(onUseCustomUrlClick)
 
         if (associatedFile != null) {
             showFileContent(associatedFile!!)
         }
+    }
+
+    private val onUseCustomUrlClick = fun(_: ActionEvent) {
+        val dialog = LibreTranslateCustomUrlDialog()
+        dialog.pack()
+        dialog.isVisible = true
     }
 
     private val onOpenItemClick = fun(_: ActionEvent) {
@@ -212,7 +217,7 @@ class MainController(val form: MainForm) {
 
     private val onTranslationButtonClick = fun(_: ActionEvent) {
         if (autoTranslationEnabled) {
-            val queryClient = QueryClient(AppInfo.autoTranslateUrl)
+            val queryClient = QueryClient(if (CustomOptions.isCustomUrlUsedForLibreTranslate) URL(CustomOptions.customLibreTranslateUrl) else AppInfo.autoTranslateUrl)
             val request = TranslationRequest(form.stringAreaText, "auto", LanguageCode.findByName(form.currentLanguage)[0].name)
             try {
                 val response = ResponseFromJSONConverter().convert(queryClient.doQuery(request))
